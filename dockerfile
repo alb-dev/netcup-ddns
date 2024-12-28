@@ -8,6 +8,7 @@ ENV PYTHONUNBUFFERED=1
 RUN apt-get update && apt upgrade -y && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
+    python3.11-venv \
     && apt-get clean && apt autoremove && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
