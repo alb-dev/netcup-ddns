@@ -13,7 +13,7 @@ RUN apt-get update && apt upgrade -y && apt-get install -y --no-install-recommen
 # Set the working directory
 WORKDIR /app
 
-RUN python -m venv /opt/venv
+RUN python3 -m venv /opt/venv
 # Enable venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN pip3 install requests
