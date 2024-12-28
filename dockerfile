@@ -13,11 +13,14 @@ RUN apt-get update && apt upgrade -y && apt-get install -y --no-install-recommen
 # Set the working directory
 WORKDIR /app
 
+RUN python -m venv /opt/venv
+# Enable venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN pip3 install requests
+
 # Copy the script into the container
 COPY ddns.py /app/ddns.py
 
-# Install Python dependencies
-RUN pip3 install requests
 
 # Set the entrypoint to run the script
 ENTRYPOINT [\"python3\", \"/app/ddns.py\"]
