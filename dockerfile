@@ -9,7 +9,7 @@ RUN apt-get update && apt upgrade -y && apt-get install -y --no-install-recommen
     python3 \
     python3-pip \
     python3.11-venv \
-    && apt-get clean && apt autoremove && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app

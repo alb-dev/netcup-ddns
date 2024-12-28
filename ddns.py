@@ -1,16 +1,20 @@
 import requests
 import json
 import socket
+import os
 
-# Configuration
+# Use environment variables for configuration
 API_URL = "https://ccp.netcup.net/run/webservice/servers/endpoint.php?JSON"
-CUSTOMER_NUMBER = "<your_customer_number>"
-API_KEY = "<your_api_key>"
-API_PASSWORD = "<your_api_password>"
-DOMAIN = "example.com"
-RECORD_NAME = "@"  # Change to "www" or the subdomain you want to update
+CUSTOMER_NUMBER = os.getenv("CUSTOMER_NUMBER")
+API_KEY = os.getenv("API_KEY")
+API_PASSWORD = os.getenv("API_PASSWORD")
+DOMAIN = os.getenv("DOMAIN")
+RECORD_NAME = os.getenv("RECORD_NAME", "@")  # Default to root record
 
 # Functions
+def return_variables():
+    return API_KEY
+
 def get_public_ip():
     """Fetch the current public IP address."""
     response = requests.get("https://api.ipify.org?format=json")
