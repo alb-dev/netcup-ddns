@@ -1,0 +1,53 @@
+name: Build and Push Multi-Arch Docker Image
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual triggering of the workflow
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set Release Version
+      id: version
+      run: |
+        # Generate a tag based on the current date and month, incrementing a counter for this month
+        CURRENT_YEAR=$(date +%Y)
+        CURRENT_MONTH=$(date +%m)
+        PREVIOUS_TAG=$(git tag -l "${CURRENT_YEAR}.${CURRENT_MONTH}.*" | sort -rV | head -n 1)
+        if [[ -z "$PREVIOUS_TAG" ]]; then
+          NEW_TAG="${CURRENT_YEAR}.${CURRENT_MONTH}.1"
+        else
+          COUNTER=$(echo "$PREVIOUS_TAG" | awk -F. '{print $NF}')
+          NEW_TAG="${CURRENT_YEAR}.${CURRENT_MONTH}.$((COUNTER + 1))"
+        fi
+        echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and Push Multi-Arch Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        push: true
+        platforms: linux/amd64,linux/arm64
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/netcup-ddns:latest
+          ghcr.io/${{ github.repository_owner }}/netcup-ddns:${{ env.NEW_TAG }}
+
+    - name: Create Git Tag
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git tag -a "${{ env.NEW_TAG }}" -m "Release ${{ env.NEW_TAG }}"
+        git push origin "${{ env.NEW_TAG }}"
