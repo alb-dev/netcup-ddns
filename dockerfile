@@ -5,10 +5,10 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app/
 
-RUN python3 -m venv /opt/venv
+RUN python -m venv /opt/venv
 
 COPY ./requirements.txt /app/requirements.txt
-RUN pip3 install -Ur requirements.txt
+RUN pip install -Ur requirements.txt
 
 FROM python:3.13.1-slim-bookworm as runner
 
@@ -23,6 +23,6 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY ./ddns.py /app/
 
 # Set the entrypoint to run the script
-ENTRYPOINT [\"python3\", \"/app/ddns.py\"]
+ENTRYPOINT [\"python\", \"/app/ddns.py\"]
 
 
