@@ -6,7 +6,7 @@ RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY ./requirements.txt /app/requirements.txt
-RUN pip install -Ur requirements.txt
+RUN pip3 install -Ur requirements.txt
 
 FROM python:3.13.1-slim-bookworm AS runner
 
@@ -21,6 +21,6 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY ./ddns.py /app/
 
 # Set the entrypoint to run the script
-ENTRYPOINT ["python", "/app/ddns.py"]
+ENTRYPOINT ["python3", "/app/ddns.py"]
 
 
