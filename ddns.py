@@ -11,10 +11,6 @@ API_PASSWORD = os.getenv("API_PASSWORD")
 DOMAIN = os.getenv("DOMAIN")
 RECORD_NAME = os.getenv("RECORD_NAME", "@")  # Default to root record
 
-# Functions
-def return_variables():
-    return API_KEY
-
 def get_public_ip():
     """Fetch the current public IP address."""
     response = requests.get("https://api.ipify.org?format=json")

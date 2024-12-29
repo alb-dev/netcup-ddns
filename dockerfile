@@ -1,27 +1,28 @@
 # Use Debian slim as the base image
-FROM debian:bookworm-20241223-slim
+FROM 3.13.1-slim-bookworm as compiler
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED 1
 
-# Install Python and required dependencies
-RUN apt-get update && apt upgrade -y && apt-get install -y --no-install-recommends \
-    python3 \
-    python3-pip \
-    python3.11-venv \
-    && apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
-
-# Set the working directory
-WORKDIR /app
+WORKDIR /app/
 
 RUN python3 -m venv /opt/venv
+
+COPY ./requirements.txt /app/requirements.txt
+RUN pip3 install -Ur requirements.txt
+
+FROM 3.13.1-slim-bookworm as runner
+
+# OS Updates for images
+RUN apt-get update && apt upgrade -y && apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app/
+COPY --from=compiler /opt/venv /opt/venv
+
 # Enable venv
 ENV PATH="/opt/venv/bin:$PATH"
-RUN pip3 install requests
-
-# Copy the script into the container
-COPY ddns.py /app/ddns.py
-
+COPY ./ddns.py /app/
 
 # Set the entrypoint to run the script
 ENTRYPOINT [\"python3\", \"/app/ddns.py\"]
+
+
