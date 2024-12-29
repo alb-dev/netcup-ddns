@@ -1,40 +1,6 @@
 {
-    "extends": ["config:base"],
-    "labels": ["dependency-update"],
-    "dockerfile": {
-      "enabled": true,
-      "fileMatch": ["^Dockerfile$"],
-      "pinDigests": true,
-      "baseImages": {
-        "enabled": true
-      }
-    },
-    "regexManagers": [
-      {
-        "fileMatch": [".github/workflows/.*\\.yml$"],
-        "matchStrings": [
-          "uses:\\s*([\\w-]+/[\\w-]+)@([\\w\\-.]+)"
-        ],
-        "datasourceTemplate": "github-releases",
-        "versioningTemplate": "semver"
-      }
-    ],
-    "packageRules": [
-      {
-        "description": "Update base images in Dockerfile",
-        "matchManagers": ["dockerfile"],
-        "groupName": "base-image-updates",
-        "schedule": ["before 5am on monday"],
-        "automerge": false
-      },
-      {
-        "description": "Update GitHub Actions versions",
-        "matchManagers": ["regex"],
-        "groupName": "github-actions-updates",
-        "labels": ["ci-update"],
-        "schedule": ["before 5am on monday"],
-        "automerge": false
-      }
-    ],
-    "automerge": false
-  }
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ]
+}
