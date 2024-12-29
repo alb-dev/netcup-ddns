@@ -1,6 +1,5 @@
 import requests
 import json
-import socket
 import os
 
 # Use environment variables for configuration
