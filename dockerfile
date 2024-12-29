@@ -23,6 +23,6 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY ./ddns.py /app/
 
 # Set the entrypoint to run the script
-ENTRYPOINT [\"python\", \"/app/ddns.py\"]
+ENTRYPOINT ["python", "/app/ddns.py"]
 
 
