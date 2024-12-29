@@ -1,11 +1,11 @@
 # Use Debian slim as the base image
 FROM python:3.13.1-slim-bookworm AS compiler
 
-RUN python -m venv /opt/venv
+RUN python3 -m venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY ./requirements.txt /app/requirements.txt
+COPY ./requirements.txt requirements.txt
 RUN pip3 install -Ur requirements.txt
 
 FROM python:3.13.1-slim-bookworm AS runner
