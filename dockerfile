@@ -1,16 +1,14 @@
 # Use Debian slim as the base image
-FROM python:3.13.1-slim-bookworm as compiler
-
-ENV PYTHONUNBUFFERED 1
-
-WORKDIR /app/
+FROM python:3.13.1-slim-bookworm AS compiler
 
 RUN python -m venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
 
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -Ur requirements.txt
 
-FROM python:3.13.1-slim-bookworm as runner
+FROM python:3.13.1-slim-bookworm AS runner
 
 # OS Updates for images
 RUN apt-get update && apt upgrade -y && apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
