@@ -71,6 +71,9 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ${{ steps.meta.outputs.tags }}  # Existing dynamic tags
+            ghcr.io/alb-dev/netcup-ddns:latest  # Add the 'latest' tag
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -82,7 +85,4 @@ jobs:
           tag_name: ${{ steps.version.outputs.version }}
           name: Release ${{ steps.version.outputs.version }}
           generate_release_notes: true
-          body: |
-            This release was triggered by:
-            ${{ github.event_name == 'schedule' && needs.check_dependency.outputs.should_build == 'true' && '- Update in fernwerker/ownDynDNS repository' || '- Direct push to this repository' }}
           token: ${{ secrets.GITHUB_TOKEN }}
